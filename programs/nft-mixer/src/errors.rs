@@ -10,4 +10,6 @@ pub enum ErrorCode {
     AccountInvalid,
     #[msg("Invalid Mint")]
     InvalidMint,
+    #[msg("Mint Not Allowed in this pool.")]
+    MintNotAllowedInThePool
 }

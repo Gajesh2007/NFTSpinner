@@ -1,8 +1,7 @@
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_spl::token::*;
-
-const PREFIX: &str = "collections";
+use crate::errors::ErrorCode;
 
 #[derive(Accounts)]
 pub struct Deposit<'info> {
@@ -42,14 +41,6 @@ pub struct Deposit<'info> {
     pub asset_user: Box<Account<'info, TokenAccount>>,
 
     #[account(
-        constraint = pool.collection == asset_mapping.collection,
-        constraint = asset_user.mint == asset_mapping.asset,
-        seeds = [PREFIX.as_bytes(), pool.collection.as_ref(), asset_user.mint.as_ref()],
-        bump = asset_mapping.bump
-    )]
-    pub asset_mapping: Account<'info, AssetMapping>,
-
-    #[account(
         init, 
         space = 150,
         payer = owner, 
@@ -68,10 +59,19 @@ pub struct Deposit<'info> {
 
 pub fn handler<'info>(
     ctx: Context<'_, '_, '_, 'info, Deposit<'info>>,
+    proof: Vec<[u8; 32]>
 ) -> Result<()> {
     let user = &mut ctx.accounts.user;
     let pool = &mut ctx.accounts.pool;
     let asset = &mut ctx.accounts.asset;
+    
+    // Validation
+    let leaf = anchor_lang::solana_program::keccak::hash(&ctx.accounts.asset_user.mint.to_bytes()).0;
+    let is_whitelisted = verify(proof, pool.root, leaf);
+
+    if is_whitelisted == false {
+        return err!(ErrorCode::MintNotAllowedInThePool);
+    }
     
     // Transfer NFT into the Mixer vault.
     {
@@ -102,4 +102,21 @@ pub fn handler<'info>(
     asset.nonce = *ctx.bumps.get("asset").unwrap();
 
     Ok(())
+}
+
+pub fn verify(proof: Vec<[u8; 32]>, root: [u8; 32], leaf: [u8; 32]) -> bool {
+    let mut computed_hash = leaf;
+    for proof_element in proof.into_iter() {
+        if computed_hash <= proof_element {
+            // Hash(current computed hash + current element of the proof)
+            computed_hash =
+                anchor_lang::solana_program::keccak::hashv(&[&computed_hash, &proof_element]).0;
+        } else {
+            // Hash(current element of the proof + current computed hash)
+            computed_hash =
+                anchor_lang::solana_program::keccak::hashv(&[&proof_element, &computed_hash]).0;
+        }
+    }
+    // Check if the computed hash (root) is equal to the provided root
+    computed_hash == root
 }

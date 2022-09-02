@@ -3,8 +3,6 @@ use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
 pub struct InitializePool<'info> {
-    pub collection: Account<'info, Collection>,
-
     #[account(mut)]
     pub initializer: Signer<'info>,
 
@@ -30,9 +28,10 @@ pub struct InitializePool<'info> {
 
 pub fn handler<'info>(
     ctx: Context<'_, '_, '_, 'info, InitializePool<'info>>,
+    root: [u8; 32]
 ) -> Result<()> {
     let pool  = &mut ctx.accounts.pool;
-    pool.collection = ctx.accounts.collection.key();
+    pool.root = root;
     pool.aup = Vec::new();
     pool.balance = 0;
     pool.count = 0;

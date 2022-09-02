@@ -2,8 +2,8 @@ use anchor_lang::prelude::*;
 
 #[account]
 pub struct Pool {
-    /// Collection
-    pub collection: Pubkey,
+    /// Whitelist 256-bit merkle root 
+    pub root: [u8; 32],
 
     /// Number of assets under protocol
     pub balance: u16,
@@ -46,23 +46,4 @@ pub struct User {
 
     /// Nonce
     pub nonce: u8
-}
-
-// Burnt Finance Collection Standard Accounts
-#[account]
-pub struct Collection {
-    pub creator: Pubkey,
-    pub authority: Pubkey,
-    pub mutable: bool,
-    pub name: String,
-    pub bump: u8,
-    pub meta: String,
-}
-
-#[account]
-pub struct AssetMapping {
-    pub collection: Pubkey,
-    pub asset: Pubkey,
-    pub bump: u8,
-    pub meta: String,
 }
