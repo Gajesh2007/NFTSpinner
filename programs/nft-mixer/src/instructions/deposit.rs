@@ -96,7 +96,7 @@ pub fn handler<'info>(
     user.balance = user.balance + 1;
     
     // Asset Data Update
-    asset.asset_mint = ctx.accounts.asset_user.mint;
+    asset.asset_mint = ctx.accounts.asset_user.mint.key();
     asset.asset_vault = ctx.accounts.asset_user.key();
     asset.pool = pool.key();
     asset.nonce = *ctx.bumps.get("asset").unwrap();
