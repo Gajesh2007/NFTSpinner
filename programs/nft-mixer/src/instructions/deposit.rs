@@ -28,7 +28,7 @@ pub struct Deposit<'info> {
         has_one = owner,
         has_one = pool,
         seeds = [
-                user.key().as_ref(),
+                owner.key().as_ref(),
                 pool.to_account_info().key().as_ref(),
         ],
         bump = user.nonce,
