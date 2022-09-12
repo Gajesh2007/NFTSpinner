@@ -72,9 +72,9 @@ pub fn handler<'info>(
     // Validation 
     if ctx.accounts.asset.key() != _asset {
         return err!(ErrorCode::AccountInvalid)
-    } if ctx.accounts.asset.asset_vault != ctx.accounts.asset_vault.key() {
+    } if ctx.accounts.asset.asset_vault.key() != ctx.accounts.asset_vault.key() {
         return err!(ErrorCode::AccountInvalid)
-    } if ctx.accounts.asset.asset_mint.key() != ctx.accounts.asset_user.mint && ctx.accounts.asset_vault.mint != ctx.accounts.asset.asset_mint {
+    } if ctx.accounts.asset.asset_mint.key() != ctx.accounts.asset_user.mint.key() && ctx.accounts.asset_vault.mint.key() != ctx.accounts.asset.asset_mint.key() {
         return err!(ErrorCode::InvalidMint);
     }
 
