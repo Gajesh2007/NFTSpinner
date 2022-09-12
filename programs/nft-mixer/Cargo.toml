@@ -1,12 +1,12 @@
 [package]
-name = "nft-mixer"
+name = "nft-spinner"
 version = "0.1.0"
 description = "Created with Anchor"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "nft_mixer"
+name = "nft_spinner"
 
 [features]
 no-entrypoint = []

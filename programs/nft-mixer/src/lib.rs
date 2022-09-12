@@ -12,7 +12,7 @@ pub use state::*;
 declare_id!("7MH6HxrLenAA28squJhHjc5j93zcGt3tKxsSNmVUAPVs");
 
 #[program]
-pub mod nft_mixer {
+pub mod nft_spinner {
     use super::*;
 
     pub fn initialize_pool<'info>(ctx: Context<'_, '_, '_, 'info, InitializePool<'info>>, root: [u8; 32]) -> Result<()> {

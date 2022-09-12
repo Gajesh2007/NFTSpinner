@@ -73,7 +73,7 @@ pub fn handler<'info>(
         return err!(ErrorCode::MintNotAllowedInThePool);
     }
     
-    // Transfer NFT into the Mixer vault.
+    // Transfer NFT into the spinner vault.
     {
         let cpi_ctx = CpiContext::new(
             ctx.accounts.token_program.to_account_info(),

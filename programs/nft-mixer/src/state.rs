@@ -41,7 +41,7 @@ pub struct User {
     /// The User 
     pub owner: Pubkey,
     
-    /// Number of assets the user can redeem from the mixer
+    /// Number of assets the user can redeem from the spinner
     pub balance: u64,
 
     /// Nonce
