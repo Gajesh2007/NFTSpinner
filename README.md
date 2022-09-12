@@ -1,5 +1,5 @@
-# NFT Mixer
-Mix your NFTs with new NFTs in the collection.
+# NFT Spinner
+Spin your NFTs with new NFTs in the collection.
 
 ## How Does It Work?
 1. You deposit x amount of NFTs from the same collection
